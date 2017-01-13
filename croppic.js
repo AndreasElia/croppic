@@ -155,7 +155,7 @@
 
 			that.form = that.outputDiv.find('.'+that.id+'_imgUploadForm');
 
-            var fileUploadId = that.CreateFallbackIframe();
+            var fileUploadId = that.createFallbackIframe();
 
 			that.imgUploadControl.off('click');
 
@@ -201,9 +201,9 @@
 				that.imgUploadControl.hide();
 
 				if (that.options.processInline) {
-				    if (typeof FileReader == "undefined") {
+				    if (typeof FileReader == 'undefined') {
 						if (that.options.onError) {
-							that.options.onError.call(that, "processInline is not supported by your browser");
+							that.options.onError.call(that, 'processInline is not supported by your browser');
 						}
 
 						that.reset();
@@ -212,8 +212,10 @@
 
 						reader.onload = function (e) {
 							var image = new Image();
+
 							image.src = e.target.result;
-							image.onload = function(){
+
+							image.onload = function () {
 								that.imgInitW = that.imgW = image.width;
 								that.imgInitH = that.imgH = image.height;
 
@@ -485,42 +487,44 @@
 
 			if (that.options.doubleZoomControls) {
 				that.cropControlZoomMuchIn = that.cropControlsCrop.find('.cropControlZoomMuchIn');
+				that.cropControlZoomMuchOut = that.cropControlsCrop.find('.cropControlZoomMuchOut');
+
 				that.cropControlZoomMuchIn.on('click', function () {
 					that.zoom(that.options.zoomFactor * 10);
 				});
 
-				that.cropControlZoomMuchOut = that.cropControlsCrop.find('.cropControlZoomMuchOut');
 				that.cropControlZoomMuchOut.on('click', function () {
 					that.zoom(-(that.options.zoomFactor * 10));
 				});
 			}
 
-			that.cropControlZoomIn = that.cropControlsCrop.find('.cropControlZoomIn');
+			that.cropControlZoomIn  = that.cropControlsCrop.find('.cropControlZoomIn');
+			that.cropControlZoomOut = that.cropControlsCrop.find('.cropControlZoomOut');
+			that.cropControlZoomIn  = that.cropControlsCrop.find('.cropControlRotateLeft');
+	        that.cropControlZoomOut = that.cropControlsCrop.find('.cropControlRotateRight');
+	        that.cropControlCrop    = that.cropControlsCrop.find('.cropControlCrop');
+			that.cropControlReset   = that.cropControlsCrop.find('.cropControlReset');
+
 			that.cropControlZoomIn.on('click', function () {
 				that.zoom(that.options.zoomFactor);
 			});
 
-			that.cropControlZoomOut = that.cropControlsCrop.find('.cropControlZoomOut');
 			that.cropControlZoomOut.on('click', function () {
 				that.zoom(-that.options.zoomFactor);
 			});
 
-			that.cropControlZoomIn = that.cropControlsCrop.find('.cropControlRotateLeft');
 	        that.cropControlZoomIn.on('click', function () {
 	        	that.rotate(-that.options.rotateFactor);
 	        });
 
-	        that.cropControlZoomOut = that.cropControlsCrop.find('.cropControlRotateRight');
 	        that.cropControlZoomOut.on('click', function () {
 	        	that.rotate(that.options.rotateFactor);
 	        });
 
-	        that.cropControlCrop = that.cropControlsCrop.find('.cropControlCrop');
 			that.cropControlCrop.on('click', function () {
 				that.crop();
 			});
 
-			that.cropControlReset = that.cropControlsCrop.find('.cropControlReset');
 			that.cropControlReset.on('click', function () {
 				that.reset();
 			});
@@ -595,7 +599,7 @@
 							}
 						}
 
-						var maxTop = -( that.imgH - that.objH);
+						var maxTop = -(that.imgH - that.objH);
 
 						if (parseInt(that.img.css('top')) < maxTop) {
 							that.img.css('top', maxTop);
@@ -613,7 +617,7 @@
 							}
 						}
 
-						var maxTop =  that.objH - that.imgH;
+						var maxTop = that.objH - that.imgH;
 
 						if (parseInt(that.img.css('top')) > maxTop) {
 							that.img.css('top', maxTop);
@@ -625,22 +629,47 @@
 					}
 
 					if (that.objW < that.imgW) {
-						if( parseInt( that.img.css('left')) > 0 ){ that.img.css('left',0); if(that.options.imgEyecandy){ that.imgEyecandy.css('left', 0); }}
+						if (parseInt(that.img.css('left')) > 0) {
+							that.img.css('left', 0);
 
-						var maxLeft = -( that.imgW-that.objW);
+							if (that.options.imgEyecandy) {
+								that.imgEyecandy.css('left', 0);
+							}
+						}
 
-						if( parseInt( that.img.css('left')) < maxLeft){ that.img.css('left', maxLeft); if(that.options.imgEyecandy){ that.imgEyecandy.css('left', maxLeft); } }
-					}else{
-						if( parseInt( that.img.css('left')) < 0 ){ that.img.css('left',0); if(that.options.imgEyecandy){ that.imgEyecandy.css('left', 0); }}
+						var maxLeft = -(that.imgW - that.objW);
 
-						var maxLeft = ( that.objW - that.imgW);
+						if (parseInt(that.img.css('left')) < maxLeft) {
+							that.img.css('left', maxLeft);
 
-						if( parseInt( that.img.css('left')) > maxLeft){ that.img.css('left', maxLeft); if(that.options.imgEyecandy){ that.imgEyecandy.css('left', maxLeft); } }
+							if (that.options.imgEyecandy) {
+								that.imgEyecandy.css('left', maxLeft);
+							}
+						}
+					} else {
+						if (parseInt(that.img.css('left')) < 0) {
+							that.img.css('left', 0);
+
+							if (that.options.imgEyecandy) {
+								that.imgEyecandy.css('left', 0);
+							}
+						}
+
+						var maxLeft = (that.objW - that.imgW);
+
+						if (parseInt(that.img.css('left')) > maxLeft) {
+							that.img.css('left', maxLeft);
+
+							if (that.options.imgEyecandy) {
+								that.imgEyecandy.css('left', maxLeft);
+							}
+						}
 					}
-					if (that.options.onImgDrag) that.options.onImgDrag.call(that);
 
+					if (that.options.onImgDrag) {
+						that.options.onImgDrag.call(that);
+					}
 				});
-
 			}).on('mouseup', function () {
 				that.img.off('mousemove');
 			}).on('mouseout', function () {
@@ -656,14 +685,14 @@
 	        that.img.css({
 	            '-webkit-transform': 'rotate(' + that.actualRotation + 'deg)',
 	            '-moz-transform': 'rotate(' + that.actualRotation + 'deg)',
-	            'transform': 'rotate(' + that.actualRotation + 'deg)',
+	            'transform': 'rotate(' + that.actualRotation + 'deg)'
 	        });
 
 	        if (that.options.imgEyecandy) {
 	            that.imgEyecandy.css({
 	                '-webkit-transform': 'rotate(' + that.actualRotation + 'deg)',
 	                '-moz-transform': 'rotate(' + that.actualRotation + 'deg)',
-	                'transform': 'rotate(' + that.actualRotation + 'deg)',
+	                'transform': 'rotate(' + that.actualRotation + 'deg)'
 	            });
 	        }
 
@@ -671,39 +700,36 @@
 	            that.options.onImgRotate.call(that);
 	        }
 	    },
-		zoom: function(zoom) {
+		zoom: function (zoom) {
 			var that = this;
-			var ratio = that.imgW / that.imgH;
-			var newWidth = that.imgW+zoom;
-			var newHeight = newWidth/ratio;
-			var doPositioning = true;
 
-			if( newWidth < that.objW || newHeight < that.objH){
+			var ratio = that.imgW / that.imgH,
+				newWidth = that.imgW + zoom,
+				newHeight = newWidth / ratio,
+				doPositioning = true;
 
-				if( newWidth - that.objW < newHeight - that.objH ){
+			if (newWidth < that.objW || newHeight < that.objH) {
+				if (newWidth - that.objW < newHeight - that.objH) {
 					newWidth = that.objW;
 					newHeight = newWidth/ratio;
-				}else{
+				} else {
 					newHeight = that.objH;
 					newWidth = ratio * newHeight;
 				}
 
 				doPositioning = false;
-
 			}
 
-			if(!that.options.scaleToFill && (newWidth > that.imgInitW || newHeight > that.imgInitH)){
-
-				if( newWidth - that.imgInitW < newHeight - that.imgInitH ){
+			if (! that.options.scaleToFill && (newWidth > that.imgInitW || newHeight > that.imgInitH)) {
+				if (newWidth - that.imgInitW < newHeight - that.imgInitH) {
 					newWidth = that.imgInitW;
-					newHeight = newWidth/ratio;
-				}else{
+					newHeight = newWidth / ratio;
+				} else {
 					newHeight = that.imgInitH;
 					newWidth = ratio * newHeight;
 				}
 
 				doPositioning = false;
-
 			}
 
 			that.imgW = newWidth;
@@ -712,75 +738,103 @@
 			that.imgH = newHeight;
 			that.img.height(newHeight);
 
-			var newTop = parseInt( that.img.css('top') ) - zoom/2;
-			var newLeft = parseInt( that.img.css('left') ) - zoom/2;
+			var newTop = parseInt(that.img.css('top')) - zoom / 2,
+				newLeft = parseInt(that.img.css('left')) - zoom / 2;
 
-			if( newTop>0 ){ newTop=0;}
-			if( newLeft>0 ){ newLeft=0;}
-
-			var maxTop = -( newHeight-that.objH); if( newTop < maxTop){	newTop = maxTop;	}
-			var maxLeft = -( newWidth-that.objW); if( newLeft < maxLeft){	newLeft = maxLeft;	}
-
-			if( doPositioning ){
-				that.img.css({'top':newTop, 'left':newLeft});
+			if (newTop > 0) {
+				newTop = 0;
 			}
 
-			if(that.options.imgEyecandy){
+			if (newLeft > 0) {
+				newLeft = 0;
+			}
+
+			var maxTop = -(newHeight-that.objH),
+				maxLeft = -(newWidth-that.objW);
+
+			if (newTop < maxTop) {
+				newTop = maxTop;
+			}
+
+			if (newLeft < maxLeft) {
+				newLeft = maxLeft;
+			}
+
+			if (doPositioning) {
+				that.img.css({
+					'top': newTop,
+					'left': newLeft
+				});
+			}
+
+			if (that.options.imgEyecandy) {
 				that.imgEyecandy.width(newWidth);
 				that.imgEyecandy.height(newHeight);
-				if( doPositioning ){
-					that.imgEyecandy.css({'top':newTop, 'left':newLeft});
+
+				if (doPositioning) {
+					that.imgEyecandy.css({
+						'top': newTop,
+						'left': newLeft
+					});
 				}
 			}
 
-			if (that.options.onImgZoom) that.options.onImgZoom.call(that);
+			if (that.options.onImgZoom) {
+				that.options.onImgZoom.call(that);
+			}
 
 		},
-		crop:function(){
+		crop: function () {
 			var that = this;
 
-			if (that.options.onBeforeImgCrop) that.options.onBeforeImgCrop.call(that);
+			if (that.options.onBeforeImgCrop) {
+				that.options.onBeforeImgCrop.call(that);
+			}
 
 			that.cropControlsCrop.hide();
 			that.showLoader();
 
-			var cropData = {
-					imgUrl:that.imgUrl,
-					imgInitW:that.imgInitW,
-					imgInitH:that.imgInitH,
-					imgW:that.imgW,
-					imgH:that.imgH,
-					imgY1:Math.abs( parseInt( that.img.css('top') ) ),
-					imgX1:Math.abs( parseInt( that.img.css('left') ) ),
-					cropH:that.objH,
-					cropW:that.objW,
-					rotation:that.actualRotation
+			var formData,
+				cropData = {
+					imgUrl: that.imgUrl,
+					imgInitW: that.imgInitW,
+					imgInitH: that.imgInitH,
+					imgW: that.imgW,
+					imgH: that.imgH,
+					imgY1: Math.abs(parseInt(that.img.css('top'))),
+					imgX1: Math.abs(parseInt(that.img.css('left'))),
+					cropH: that.objH,
+					cropW: that.objW,
+					rotation: that.actualRotation
 				};
 
-			var formData;
-
-			if(typeof FormData == 'undefined'){
+			if (typeof FormData == 'undefined') {
 				var XHR = new XMLHttpRequest();
-				var urlEncodedData = "";
+				var urlEncodedData = '';
 				var urlEncodedDataPairs = [];
 
-				for(var key in cropData) {
+				for (var key in cropData) {
 				  urlEncodedDataPairs.push(encodeURIComponent(key) + '=' + encodeURIComponent(cropData[key]));
 				}
-				for(var key in that.options.cropData) {
+
+				for (var key in that.options.cropData) {
 				  urlEncodedDataPairs.push(encodeURIComponent(key) + '=' + encodeURIComponent(that.options.cropData[key]));
 				}
+
 				urlEncodedData  = urlEncodedDataPairs.join('&').replace(/%20/g, '+');
 
-				XHR.addEventListener('error', function(event) {
-					if (that.options.onError) that.options.onError.call(that,"XHR Request failed");
+				XHR.addEventListener('error', function (e) {
+					if (that.options.onError) {
+						that.options.onError.call(that, 'XHR Request failed');
+					}
 				});
-				XHR.onreadystatechange=function(){
-				if (XHR.readyState==4 && XHR.status==200)
-					{
+
+				XHR.onreadystatechange = function () {
+					if (XHR.readyState == 4 && XHR.status == 200) {
 						that.afterCrop(XHR.responseText);
 					}
 				}
+
 				XHR.open('POST', that.options.cropUrl);
 
 				XHR.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -788,17 +842,18 @@
 
 				XHR.send(urlEncodedData);
 
-			}else{
+			} else {
 				formData = new FormData();
+
 				for (var key in cropData) {
-					if( cropData.hasOwnProperty(key) ) {
-							formData.append( key , cropData[key] );
+					if (cropData.hasOwnProperty(key)) {
+						formData.append(key, cropData[key]);
 					}
 				}
 
 				for (var key in that.options.cropData) {
-					if( that.options.cropData.hasOwnProperty(key) ) {
-							formData.append( key , that.options.cropData[key] );
+					if (that.options.cropData.hasOwnProperty(key)) {
+						formData.append(key, that.options.cropData[key]);
 					}
 				}
 
@@ -810,33 +865,32 @@
 					contentType: false,
 					processData: false,
 					type: 'POST'
-				}).always(function (data) {
-
-					that.afterCrop(data);
-
+				}).always(function (response) {
+					that.afterCrop(response);
 				});
 			}
-
-			//
         },
 		afterCrop: function (data) {
             var that = this;
+
 			try {
 				response = jQuery.parseJSON(data);
-			}
-			catch(err) {
-				response = typeof data =='object' ? data : jQuery.parseJSON(data);
+			} catch (error) {
+				response = typeof data == 'object' ? data : jQuery.parseJSON(data);
 			}
 
             if (response.status == 'success') {
-
-                if (that.options.imgEyecandy)
+                if (that.options.imgEyecandy) {
 					that.imgEyecandy.hide();
+                }
 
                 that.destroy();
 
                 that.obj.append('<img class="croppedImg" src="' + response.url + '">');
-                if (that.options.outputUrlId !== '') { $('#' + that.options.outputUrlId).val(response.url); }
+
+                if (that.options.outputUrlId !== '') {
+                	$('#' + that.options.outputUrlId).val(response.url);
+                }
 
                 that.croppedImg = that.obj.find('.croppedImg');
 
@@ -845,106 +899,148 @@
                 that.hideLoader();
 		    }
             if (response.status == 'error') {
-                if (that.options.onError) that.options.onError.call(that,response.message);
+                if (that.options.onError) {
+                	that.options.onError.call(that,response.message);
+                }
+
 				that.hideLoader();
-				setTimeout( function(){ that.reset(); },2000)
+
+				setTimeout(function () {
+					that.reset();
+				}, 2000);
             }
 
-            if (that.options.onAfterImgCrop) that.options.onAfterImgCrop.call(that, response);
+            if (that.options.onAfterImgCrop) {
+            	that.options.onAfterImgCrop.call(that, response);
+            }
         },
-		showLoader:function(){
+		showLoader: function () {
 			var that = this;
 
 			that.obj.append(that.options.loaderHtml);
+
 			that.loader = that.obj.find('.loader');
 
 		},
-		hideLoader:function(){
+		hideLoader: function () {
 			var that = this;
+
 			that.loader.remove();
 		},
-		reset:function(){
+		reset: function () {
 			var that = this;
+
 			that.destroy();
 
 			that.init();
 
-			if( !$.isEmptyObject(that.croppedImg)){
+			if (! $.isEmptyObject(that.croppedImg)) {
 				that.obj.append(that.croppedImg);
-				if(that.options.outputUrlId !== ''){	$('#'+that.options.outputUrlId).val(that.croppedImg.attr('url'));	}
+
+				if (that.options.outputUrlId !== '') {
+					$('#'+that.options.outputUrlId).val(that.croppedImg.attr('url'));
+				}
 			}
-			if (typeof that.options.onReset == 'function')
+
+			if (typeof that.options.onReset == 'function') {
                 that.options.onReset.call(that);
+			}
 		},
-		destroy:function(){
+		destroy: function () {
 			var that = this;
-			if(that.options.modal && !$.isEmptyObject(that.modal) ){ that.destroyModal(); }
-			if(that.options.imgEyecandy && !$.isEmptyObject(that.imgEyecandy) ){  that.destroyEyecandy(); }
-			if( !$.isEmptyObject( that.cropControlsUpload ) ){  that.cropControlsUpload.remove(); }
-			if( !$.isEmptyObject( that.cropControlsCrop ) ){   that.cropControlsCrop.remove(); }
-			if( !$.isEmptyObject( that.loader ) ){   that.loader.remove(); }
-			if( !$.isEmptyObject( that.form ) ){   that.form.remove(); }
+
+			if (that.options.modal && ! $.isEmptyObject(that.modal)) {
+				that.destroyModal();
+			}
+
+			if (that.options.imgEyecandy && ! $.isEmptyObject(that.imgEyecandy)) {
+				that.destroyEyecandy();
+			}
+
+			if (! $.isEmptyObject(that.cropControlsUpload)) {
+				that.cropControlsUpload.remove();
+			}
+
+			if (! $.isEmptyObject(that.cropControlsCrop)) {
+				that.cropControlsCrop.remove();
+			}
+
+			if (! $.isEmptyObject(that.loader)) {
+				that.loader.remove();
+			}
+
+			if (! $.isEmptyObject(that.form)) {
+				that.form.remove();
+			}
+
 			that.obj.html('');
 		},
 		isAjaxUploadSupported: function () {
-            var input = document.createElement("input");
-            input.type = "file";
+            var input = document.createElement('input');
+
+            input.type = 'file';
 
             return (
-                "multiple" in input &&
-                    typeof File != "undefined" &&
-                    typeof FormData != "undefined" &&
-                    typeof (new XMLHttpRequest()).upload != "undefined");
+				'multiple' in input &&
+				typeof File != 'undefined' &&
+				typeof FormData != 'undefined' &&
+				// typeof (new XMLHttpRequest()).upload != 'undefined'
+				typeof new XMLHttpRequest().upload != 'undefined'
+            );
         },
-        CreateFallbackIframe: function () {
+        createFallbackIframe: function () {
             var that = this;
 
-            if (!that.isAjaxUploadSupported()) {
-
+            if (! that.isAjaxUploadSupported()) {
                 if (jQuery.isEmptyObject(that.iframeobj)) {
-                    var iframe = document.createElement("iframe");
-                    iframe.setAttribute("id", that.id + "_upload_iframe");
-                    iframe.setAttribute("name", that.id + "_upload_iframe");
-                    iframe.setAttribute("width", "0");
-                    iframe.setAttribute("height", "0");
-                    iframe.setAttribute("border", "0");
-                    iframe.setAttribute("src", "javascript:false;");
-                    iframe.style.display = "none";
+                    var iframe = document.createElement('iframe');
+
+                    iframe.setAttribute('id', that.id + '_upload_iframe');
+                    iframe.setAttribute('name', that.id + '_upload_iframe');
+                    iframe.setAttribute('width', 0);
+                    iframe.setAttribute('height', 0);
+                    iframe.setAttribute('border', 0);
+                    iframe.setAttribute('src', 'javascript: false;');
+
+                    iframe.style.display = 'none';
+
                     document.body.appendChild(iframe);
                 } else {
                     iframe = that.iframeobj[0];
                 }
 
-                var myContent = '<!DOCTYPE html>'
-                                + '<html><head><title>Uploading File</title></head>'
-                                + '<body>'
-                                + '<form '
-                                + 'class="' + that.id + '_upload_iframe_form" '
-                                + 'name="' + that.id + '_upload_iframe_form" '
-                                + 'action="' + that.options.uploadUrl + '" method="post" '
-                                + 'enctype="multipart/form-data" encoding="multipart/form-data" style="display:none;">'
-                                + $("#" + that.id + '_imgUploadField')[0].outerHTML
-                                + '</form></body></html>';
+                var myContent = '<!DOCTYPE html>' +
+					'<html><head><title>Uploading File</title></head>' +
+					'<body>' +
+					'<form ' +
+					'class="' + that.id + '_upload_iframe_form" ' +
+					'name="' + that.id + '_upload_iframe_form" ' +
+					'action="' + that.options.uploadUrl + '" method="post" ' +
+					'enctype="multipart/form-data" encoding="multipart/form-data" style="display: none;">' +
+					$('#' + that.id + '_imgUploadField')[0].outerHTML
+					'</form></body></html>';
 
                 iframe.contentWindow.document.open('text/htmlreplace');
                 iframe.contentWindow.document.write(myContent);
                 iframe.contentWindow.document.close();
 
-                that.iframeobj = $("#" + that.id + "_upload_iframe");
-                that.iframeform = that.iframeobj.contents().find("html").find("." + that.id + "_upload_iframe_form");
+                that.iframeobj = $('#' + that.id + '_upload_iframe');
+                that.iframeform = that.iframeobj.contents().find('html').find('.' + that.id + '_upload_iframe_form');
 
-                that.iframeform.on("change", "input", function () {
-					that.SubmitFallbackIframe(that);
+                that.iframeform.on('change', 'input', function () {
+					that.submitFallbackIframe(that);
                 });
-                that.iframeform.find("input")[0].attachEvent("onchange", function () {
-                    that.SubmitFallbackIframe(that);
+
+                that.iframeform.find('input')[0].attachEvent('onchange', function () {
+                    that.submitFallbackIframe(that);
                 });
 
                 var eventHandlermyFile = function () {
-                    if (iframe.detachEvent)
-                        iframe.detachEvent("onload", eventHandlermyFile);
-                    else
-                        iframe.removeEventListener("load", eventHandlermyFile, false);
+                    if (iframe.detachEvent) {
+                        iframe.detachEvent('onload', eventHandlermyFile);
+                    } else {
+                        iframe.removeEventListener('load', eventHandlermyFile, false);
+                    }
 
                     var response = that.getIframeContentJSON(iframe);
 
@@ -953,46 +1049,56 @@
                     }
                 }
 
-                if (iframe.addEventListener)
-                    iframe.addEventListener("load", eventHandlermyFile, true);
-                if (iframe.attachEvent)
-                    iframe.attachEvent("onload", eventHandlermyFile);
+                if (iframe.addEventListener) {
+                    iframe.addEventListener('load', eventHandlermyFile, true);
+                }
 
-                return "#" + that.id + '_imgUploadField';
+                if (iframe.attachEvent) {
+                    iframe.attachEvent('onload', eventHandlermyFile);
+                }
+
+                return '#' + that.id + '_imgUploadField';
 
             } else {
-                return "";
+                return '';
             }
 
         },
-        SubmitFallbackIframe: function (that) {
+        submitFallbackIframe: function (that) {
             that.showLoader();
-			if(that.options.processInline && !that.options.uploadUrl){
-				if (that.options.onError){
-					that.options.onError.call(that,"processInline is not supported by your browser ");
+
+			if (that.options.processInline && ! that.options.uploadUrl) {
+				if (that.options.onError) {
+					that.options.onError.call(that, 'processInline is not supported by your browser');
+
 					that.hideLoader();
 				}
-			}else{
-				if (that.options.onBeforeImgUpload) that.options.onBeforeImgUpload.call(that);
+			} else {
+				if (that.options.onBeforeImgUpload) {
+					that.options.onBeforeImgUpload.call(that);
+				}
+
 				that.iframeform[0].submit();
 			}
         },
         getIframeContentJSON: function (iframe) {
             try {
                 var doc = iframe.contentDocument ? iframe.contentDocument : iframe.contentWindow.document,
+	                innerHTML = doc.body.innerHTML,
 	                response;
 
-                var innerHTML = doc.body.innerHTML;
-                if (innerHTML.slice(0, 5).toLowerCase() == "<pre>" && innerHTML.slice(-6).toLowerCase() == "</pre>") {
+                if (innerHTML.slice(0, 5).toLowerCase() == '<pre>' && innerHTML.slice(-6).toLowerCase() == '</pre>') {
                     innerHTML = doc.body.firstChild.firstChild.nodeValue;
                 }
+
                 response = jQuery.parseJSON(innerHTML);
-            } catch (err) {
-                response = { success: false };
+            } catch (error) {
+                response = {
+                	success: false
+                };
             }
 
             return response;
         }
-
 	};
 })(window, document);
