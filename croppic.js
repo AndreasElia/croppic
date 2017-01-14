@@ -1,7 +1,16 @@
 /*
- * Croppic
- * Dependancy: jQuery
- * Author(s): Ognjen "Zmaj Džedaj" Božičković, Mat Steinlin
+ * croppic
+ *
+ * Version: 1.0.1
+ * Author(s):
+ *     Ognjen "Zmaj Džedaj" Božičković
+ *     Mat Steinlin
+ *     Andreas Elia
+ *
+ * Website: https://croppic.com
+ * Docs: https://croppic.com/docs
+ * Repo: https://github.com/AndreasElia/croppic
+ * Issues: https://github.com/AndreasElia/croppic/issues
  */
 
 (function (window, document) {
@@ -330,7 +339,7 @@
 		afterUpload: function (data) {
             var that = this;
 
-           	response = typeof data =='object' ? data : jQuery.parseJSON(data);
+           	response = typeof data =='object' ? data : $.parseJSON(data);
 
             if (response.status == 'success') {
                 that.imgInitW = that.imgW = response.width;
@@ -874,9 +883,9 @@
             var that = this;
 
 			try {
-				response = jQuery.parseJSON(data);
+				response = $.parseJSON(data);
 			} catch (error) {
-				response = typeof data == 'object' ? data : jQuery.parseJSON(data);
+				response = typeof data == 'object' ? data : $.parseJSON(data);
 			}
 
             if (response.status == 'success') {
@@ -992,7 +1001,7 @@
             var that = this;
 
             if (! that.isAjaxUploadSupported()) {
-                if (jQuery.isEmptyObject(that.iframeobj)) {
+                if ($.isEmptyObject(that.iframeobj)) {
                     var iframe = document.createElement('iframe');
 
                     iframe.setAttribute('id', that.id + '_upload_iframe');
@@ -1044,7 +1053,7 @@
 
                     var response = that.getIframeContentJSON(iframe);
 
-                    if (jQuery.isEmptyObject(that.modal)) {
+                    if ($.isEmptyObject(that.modal)) {
                         that.afterUpload(response);
                     }
                 }
@@ -1091,7 +1100,7 @@
                     innerHTML = doc.body.firstChild.firstChild.nodeValue;
                 }
 
-                response = jQuery.parseJSON(innerHTML);
+                response = $.parseJSON(innerHTML);
             } catch (error) {
                 response = {
                 	success: false
